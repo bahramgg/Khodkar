@@ -52,7 +52,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
   - DoD: `docker compose up` ⇐ لاگین موبایلی کار می‌کند.
 - [x] **هفته ۲** — tenants + پنل خالی ۴صفحه‌ای RTL.
   - DoD: ساخت tenant و سوئیچ امن (membership-based؛ سوئیچ به tenantِ غیرعضو ⇐ ۴۰۳).
-- [ ] هفته ۳ — crawler (Woo + generic) + ایمپورت کاتالوگ.
+- [x] **هفته ۳** — crawler (Woo + generic) + ایمپورت کاتالوگ.
+  - DoD: سایت تستی ⇐ ۱۰۰+ محصول با قیمت درست (E2E: crawl زنده ⇐ import ⇐ ۱۲۰ محصول).
+- [ ] هفته ۴ — RAG (pgvector) + agent core + policy layer.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.
