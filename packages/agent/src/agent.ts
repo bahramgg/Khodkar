@@ -27,6 +27,8 @@ export interface AgentDeps {
   /** Called when a question can't be grounded/answered (feeds improvement). */
   logUnanswered?: (question: string) => void | Promise<void>;
   confidenceThreshold?: number;
+  /** Minimum retrieval similarity for a doc to count as grounding (0..1). */
+  relevanceFloor?: number;
   topK?: number;
 }
 
@@ -56,8 +58,11 @@ function allowedNumbersFrom(docs: RetrievedDoc[]): number[] {
 export async function respond(deps: AgentDeps, message: string): Promise<AgentResult> {
   const normalized = normalizeMessage(message);
   const k = deps.topK ?? 5;
+  const floor = deps.relevanceFloor ?? 0.25;
 
-  const context = await deps.retriever.search(normalized, k);
+  // Retrieve, then keep only docs that clear the relevance floor as grounding.
+  const retrieved = await deps.retriever.search(normalized, k);
+  const context = retrieved.filter((d) => d.score >= floor);
   const proposal = await deps.responder.propose({ message: normalized, context });
 
   const decision = checkAnswer({

@@ -25,5 +25,6 @@ export async function POST(req: Request) {
   if (!result.ok) return NextResponse.json(result, { status: 400 });
 
   await issueSession(result.session);
-  return NextResponse.json({ ok: true, redirectTo: '/panel' });
+  // Continue the agentic onboarding (crawl → interview → sandbox → go live).
+  return NextResponse.json({ ok: true, redirectTo: '/onboarding' });
 }

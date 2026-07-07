@@ -9,7 +9,12 @@
 import { fa, formatToman } from '@khodkar/shared';
 import { respond, type AgentDeps, type AgentResult, type Responder, type Proposal } from './agent.js';
 
-/** Compose a grounded answer from the retrieved catalog — no model call. */
+/**
+ * Compose a grounded answer from the retrieved catalog — no model call.
+ * Confidence reflects *grounding* (we're quoting real catalog/fact data), not
+ * the raw retrieval score; whether a doc is relevant enough to use is decided
+ * upstream by the agent's relevance floor.
+ */
 export class CatalogResponder implements Responder {
   async propose(input: Parameters<Responder['propose']>[0]): Promise<Proposal> {
     const top = input.context[0];
@@ -17,10 +22,10 @@ export class CatalogResponder implements Responder {
 
     if (top.kind === 'product') {
       const price = top.price != null ? ` قیمت: ${formatToman(top.price)}.` : '';
-      return { text: `«${top.title}» را داریم.${price}`, confidence: top.score };
+      return { text: `«${top.title}» را داریم.${price}`, confidence: 0.8 };
     }
     // fact
-    return { text: top.text, confidence: top.score };
+    return { text: top.text, confidence: 0.75 };
   }
 }
 

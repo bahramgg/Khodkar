@@ -12,14 +12,15 @@ const nextConfig = {
     '@khodkar/db',
     '@khodkar/channels',
     '@khodkar/agent',
+    '@khodkar/crawler',
     '@khodkar/presets',
   ],
   output: 'standalone',
   experimental: {
     // Trace files from the monorepo root so standalone bundles workspace deps.
     outputFileTracingRoot: resolve(__dirname, '../../'),
-    // db/crypto packages use node built-ins; keep them server-external.
-    serverComponentsExternalPackages: ['postgres'],
+    // db/crypto/crawler packages use node built-ins; keep them server-external.
+    serverComponentsExternalPackages: ['postgres', 'cheerio'],
   },
   webpack: (config) => {
     // Workspace packages are TS source that use `.js` import specifiers

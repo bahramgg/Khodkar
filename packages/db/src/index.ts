@@ -5,3 +5,4 @@ export * from './import.js';
 export * from './rag.js';
 export * from './channels.js';
 export * from './inbox.js';
+export * from './tenant.js';

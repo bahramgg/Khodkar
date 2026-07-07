@@ -14,7 +14,9 @@
   "dependencies": {
     "@khodkar/agent": "workspace:*",
     "@khodkar/channels": "workspace:*",
+    "@khodkar/crawler": "workspace:*",
     "@khodkar/db": "workspace:*",
+    "@khodkar/presets": "workspace:*",
     "@khodkar/shared": "workspace:*",
     "drizzle-orm": "^0.38.3",
     "grammy": "^1.32.0",

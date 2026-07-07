@@ -29,9 +29,15 @@ importers:
       '@khodkar/channels':
         specifier: workspace:*
         version: link:../../packages/channels
+      '@khodkar/crawler':
+        specifier: workspace:*
+        version: link:../../packages/crawler
       '@khodkar/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@khodkar/presets':
+        specifier: workspace:*
+        version: link:../../presets
       '@khodkar/shared':
         specifier: workspace:*
         version: link:../../packages/shared
