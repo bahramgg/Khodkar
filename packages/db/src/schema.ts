@@ -363,6 +363,24 @@ export const qualityReports = pgTable(
   (t) => [uniqueIndex('quality_tenant_week_uq').on(t.tenantId, t.week)],
 );
 
+// ─── audit_log ────────────────────────────────────────────────────────────────
+// Full audit trail of agent decisions + owner/system actions (§11).
+export const auditLog = pgTable(
+  'audit_log',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'cascade' }),
+    convId: uuid('conv_id').references(() => conversations.id, { onDelete: 'set null' }),
+    actor: text('actor').notNull(), // agent | owner | system
+    action: text('action').notNull(),
+    meta: jsonb('meta').notNull().default({}),
+    createdAt: now(),
+  },
+  (t) => [index('audit_tenant_idx').on(t.tenantId, t.createdAt)],
+);
+
 // ─── unanswered_questions ─────────────────────────────────────────────────────
 // Fed by the `log_unanswered` path (zero-hit / low-confidence). One-click
 // convert to a FAQ (§11). status: open | converted | dismissed.
@@ -399,5 +417,6 @@ export const schema = {
   subscriptions,
   payments,
   qualityReports,
+  auditLog,
   unansweredQuestions,
 };

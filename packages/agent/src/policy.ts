@@ -61,6 +61,7 @@ const DISCOUNT_COMMITMENT = [
   'قطعا',
   'قطعاً',
   'گارانتی',
+  'آدرس', // committing a new address is owner-only (§6)
 ];
 const SENSITIVE = ['شکایت', 'برگشت وجه', 'عودت وجه', 'خسارت', 'شکسته', 'خراب'];
 

@@ -29,6 +29,13 @@
       "when": 1783435285249,
       "tag": "0003_flimsy_meltdown",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783436066388,
+      "tag": "0004_thin_puppet_master",
+      "breakpoints": true
     }
   ]
 }

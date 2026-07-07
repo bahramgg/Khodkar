@@ -10,6 +10,7 @@ import {
   insertFact,
   setUnansweredStatus,
   setFactEmbedding,
+  recordAudit,
 } from '@khodkar/db';
 import { findIranMobile } from '@khodkar/shared';
 import { decryptTelegramCredentials } from './telegram-creds.js';
@@ -54,6 +55,7 @@ export async function resolveDraft(
 
   if (action === 'reject') {
     await setDraftStatus(db, draftId, 'rejected');
+    await recordAudit(db, { tenantId, convId: draft.convId, actor: 'owner', action: 'draft_reject' });
     return { ok: true, sent: false };
   }
 
@@ -74,6 +76,13 @@ export async function resolveDraft(
 
   await addMessage(db, { convId: draft.convId, role: 'owner', text, meta: { via: action } });
   await setDraftStatus(db, draftId, action === 'edit' ? 'edited' : 'approved');
+  await recordAudit(db, {
+    tenantId,
+    convId: draft.convId,
+    actor: 'owner',
+    action: `draft_${action}`,
+    meta: { sent },
+  });
   return { ok: true, sent };
 }
 

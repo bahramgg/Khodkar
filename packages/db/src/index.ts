@@ -7,3 +7,5 @@ export * from './channels.js';
 export * from './inbox.js';
 export * from './tenant.js';
 export * from './billing.js';
+export * from './audit.js';
+export * from './quality.js';

@@ -81,6 +81,12 @@ importers:
 
   apps/worker:
     dependencies:
+      '@khodkar/agent':
+        specifier: workspace:*
+        version: link:../../packages/agent
+      '@khodkar/channels':
+        specifier: workspace:*
+        version: link:../../packages/channels
       '@khodkar/db':
         specifier: workspace:*
         version: link:../../packages/db

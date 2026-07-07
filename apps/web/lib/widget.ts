@@ -1,6 +1,14 @@
 /** Web-widget channel: provisioning + message handling for external sites. */
 import 'server-only';
-import { getDb, upsertChannel, getActiveChannel, getChannelById } from '@khodkar/db';
+import {
+  getDb,
+  upsertChannel,
+  getActiveChannel,
+  getChannelById,
+  isBotEnabled,
+  recordAudit,
+} from '@khodkar/db';
+import { fa } from '@khodkar/shared';
 import { handleCustomerText } from '@khodkar/channels';
 import { agentForTenant } from './telegram.js';
 import { makeConversationSink } from './conversation-sink.js';
@@ -48,6 +56,17 @@ export async function handleWidgetMessage(
   }
   if (rateLimited(`${key}:${sessionId}`)) return { ok: false, error: 'rate_limited' };
 
+  // Kill-switch.
+  if (!(await isBotEnabled(getDb(), channel.tenantId))) {
+    await recordAudit(getDb(), {
+      tenantId: channel.tenantId,
+      actor: 'system',
+      action: 'bot_paused_skip',
+      meta: { channel: 'web' },
+    });
+    return { ok: true, reply: fa.agent.paused, action: 'paused' };
+  }
+
   await recordLeadFromText(channel.tenantId, text, 'web');
   await recordMessageUsage(channel.tenantId);
   const sink = makeConversationSink(channel.tenantId, key);
@@ -56,5 +75,12 @@ export async function handleWidgetMessage(
     { sink, agent },
     { customerRef: `web:${sessionId}`, text },
   );
+  await recordAudit(getDb(), {
+    tenantId: channel.tenantId,
+    convId: r.convId,
+    actor: 'agent',
+    action: 'reply',
+    meta: { action: r.action },
+  });
   return { ok: true, reply: r.reply, action: r.action };
 }

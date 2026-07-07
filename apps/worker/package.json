@@ -11,6 +11,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@khodkar/agent": "workspace:*",
+    "@khodkar/channels": "workspace:*",
     "@khodkar/db": "workspace:*",
     "@khodkar/shared": "workspace:*",
     "bullmq": "^5.34.5",

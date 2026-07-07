@@ -66,7 +66,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
   - DoD: ویجت روی یک سایت خارجی کار می‌کند (تأیید با مرورگر واقعی روی origin جدا).
 - [x] **هفته ۹** — billing زرین‌پال + usage metering + پلن‌ها.
   - DoD: پرداخت تست ⇐ فعال‌سازی پلن (E2E: checkout→callback→plan=basic + subscription).
-- [ ] هفته ۱۰ — گزارش هفتگی کیفیت + audit + kill-switch + تست injection.
+- [x] **هفته ۱۰** — گزارش هفتگی کیفیت + audit + kill-switch + تست injection.
+  - DoD: گزارش نمونه به تلگرام مالک (E2E: report → owner chat + quality_reports + kill-switch + audit).
+- [ ] هفته ۱۱ — لندینگ + دموی زنده + آنالیتیکس اکتیویشن.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.

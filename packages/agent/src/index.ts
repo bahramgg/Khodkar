@@ -6,3 +6,5 @@ export * from './indexing.js';
 export * from './tools.js';
 export * from './agent.js';
 export * from './customer.js';
+export * from './report.js';
+export * from './weekly.js';

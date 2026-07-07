@@ -7,8 +7,11 @@ import {
   getChannelById,
   getActiveChannel,
   insertUnanswered,
+  isBotEnabled,
+  recordAudit,
   type ChannelRow,
 } from '@khodkar/db';
+import { fa } from '@khodkar/shared';
 import {
   DbRetriever,
   CatalogResponder,
@@ -105,9 +108,26 @@ export async function processTelegramUpdate(
   const bot = buildTelegramBot(creds.token, {
     botInfo: creds.botInfo,
     onText: async ({ chatId, text }) => {
+      // Kill-switch: when the owner pauses the bot, hold without answering.
+      if (!(await isBotEnabled(getDb(), channel.tenantId))) {
+        await recordAudit(getDb(), {
+          tenantId: channel.tenantId,
+          actor: 'system',
+          action: 'bot_paused_skip',
+          meta: { channel: 'telegram' },
+        });
+        return fa.agent.paused;
+      }
       await recordLeadFromText(channel.tenantId, text);
       await recordMessageUsage(channel.tenantId);
       const r = await handleCustomerText({ sink, agent }, { customerRef: String(chatId), text });
+      await recordAudit(getDb(), {
+        tenantId: channel.tenantId,
+        convId: r.convId,
+        actor: 'agent',
+        action: 'reply',
+        meta: { action: r.action },
+      });
       return r.reply;
     },
   });
