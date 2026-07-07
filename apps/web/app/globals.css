@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  font-family: 'Vazirmatn', system-ui, sans-serif;
+}
+
+/* Persian digits render best with tabular figures in stat tiles. */
+.nums {
+  font-feature-settings: 'ss01';
+  font-variant-numeric: tabular-nums;
+}

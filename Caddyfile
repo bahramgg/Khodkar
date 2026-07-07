@@ -1,0 +1,7 @@
+# Caddy reverse proxy with automatic TLS for production (VPS deploy).
+# Replace `khodkar.example` with the real domain. Not used by the local
+# `docker compose up` dev flow (web is exposed directly on :3000).
+khodkar.example {
+	encode zstd gzip
+	reverse_proxy web:3000
+}

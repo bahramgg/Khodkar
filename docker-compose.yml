@@ -1,0 +1,69 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-khodkar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-khodkar}
+      POSTGRES_DB: ${POSTGRES_DB:-khodkar}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-khodkar} -d ${POSTGRES_DB:-khodkar}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: deps
+    profiles: ["setup"]
+    command: sh -c "pnpm db:migrate && pnpm db:seed"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-khodkar}:${POSTGRES_PASSWORD:-khodkar}@db:5432/${POSTGRES_DB:-khodkar}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER:-khodkar}:${POSTGRES_PASSWORD:-khodkar}@db:5432/${POSTGRES_DB:-khodkar}
+      REDIS_URL: redis://redis:6379
+      SESSION_SECRET: ${SESSION_SECRET:-dev-only-change-me-please-0000000000000000000000000000000000000000}
+      CREDENTIALS_KEY: ${CREDENTIALS_KEY:-00000000000000000000000000000000000000000000000000000000000000ff}
+      SMS_PROVIDER: ${SMS_PROVIDER:-mock}
+      OTP_TTL_SECONDS: ${OTP_TTL_SECONDS:-300}
+      OTP_LENGTH: ${OTP_LENGTH:-5}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  redisdata:
