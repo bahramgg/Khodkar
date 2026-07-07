@@ -9,13 +9,12 @@ import {
   ensureConversation,
   addMessage,
   createDraft,
+  insertUnanswered,
   type ChannelRow,
 } from '@khodkar/db';
 import type { MessageRole } from '@khodkar/shared';
-import { encrypt, decrypt, keyFromHex } from '@khodkar/shared';
 import {
   DbRetriever,
-  HashEmbedder,
   CatalogResponder,
   makeCustomerAgent,
   indexTenantCatalog,
@@ -30,13 +29,12 @@ import {
 } from '@khodkar/channels';
 import type { Update } from 'grammy/types';
 import { env } from './env.js';
+import { embedder } from './embeddings.js';
+import { encryptTelegramCredentials, decryptTelegramCredentials } from './telegram-creds.js';
+import { recordLeadFromText } from './inbox.js';
 
-// Offline 1536-dim baseline embedder (OpenRouter embeddings drop in later).
-const embedder = new HashEmbedder();
-
-const credKey = () => keyFromHex(env.credentialsKey);
-const encryptCreds = (c: TelegramCredentials): string => encrypt(JSON.stringify(c), credKey());
-const decryptCreds = (s: string): TelegramCredentials => JSON.parse(decrypt(s, credKey()));
+const encryptCreds = encryptTelegramCredentials;
+const decryptCreds = decryptTelegramCredentials;
 
 /** Conversation sink bound to one tenant + channel. */
 class DrizzleConversationSink implements ConversationSink {
@@ -61,6 +59,7 @@ export function agentForTenant(tenantId: string) {
   return makeCustomerAgent({
     retriever: new DbRetriever(getDb(), tenantId, embedder),
     responder: new CatalogResponder(),
+    logUnanswered: (question) => insertUnanswered(getDb(), { tenantId, question }),
   });
 }
 
@@ -127,6 +126,7 @@ export async function processTelegramUpdate(
   const bot = buildTelegramBot(creds.token, {
     botInfo: creds.botInfo,
     onText: async ({ chatId, text }) => {
+      await recordLeadFromText(channel.tenantId, text);
       const r = await handleCustomerText({ sink, agent }, { customerRef: String(chatId), text });
       return r.reply;
     },

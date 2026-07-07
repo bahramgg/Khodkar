@@ -15,6 +15,13 @@
       "when": 1783430613300,
       "tag": "0001_round_vermin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783433418211,
+      "tag": "0002_bouncy_arachne",
+      "breakpoints": true
     }
   ]
 }

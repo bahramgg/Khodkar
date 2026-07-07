@@ -49,6 +49,22 @@ export async function setWebhook(
   return res.ok && data.ok === true;
 }
 
+/** Send a message to a chat via the Bot API (used by owner draft-approval). */
+export async function sendTelegramMessage(
+  token: string,
+  chatId: string | number,
+  text: string,
+  fetcher: TgFetcher = fetch,
+): Promise<boolean> {
+  const res = await fetcher(`${API}/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text }),
+  });
+  const data = (await res.json()) as { ok?: boolean };
+  return res.ok && data.ok === true;
+}
+
 export interface BuildBotOptions {
   botInfo?: UserFromGetMe;
   /** Produce the reply text for an incoming message; empty string = no reply. */

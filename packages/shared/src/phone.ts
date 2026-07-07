@@ -48,3 +48,18 @@ export function normalizeIranMobile(raw: string): string | null {
 export function isValidIranMobile(raw: string): boolean {
   return normalizeIranMobile(raw) !== null;
 }
+
+/**
+ * Scan free text for the first Iranian mobile number (e.g. a customer sharing
+ * their number in a chat). Returns the canonical form or null.
+ */
+export function findIranMobile(text: string): string | null {
+  if (!text) return null;
+  const compact = toEnglishDigits(text).replace(/[\s-]/g, '');
+  const matches = compact.match(/(?:0098|\+?98|0)?9\d{9}/g) ?? [];
+  for (const m of matches) {
+    const n = normalizeIranMobile(m);
+    if (n) return n;
+  }
+  return null;
+}

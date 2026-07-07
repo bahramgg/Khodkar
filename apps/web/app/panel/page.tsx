@@ -1,4 +1,5 @@
 import { fa, toPersianDigits } from '@khodkar/shared';
+import { getDb, countPendingDrafts, countLeads, countTodayConversations } from '@khodkar/db';
 import { requireTenant } from '@/lib/tenant';
 import { telegramStatus } from '@/lib/telegram';
 import { TelegramConnect } from './telegram-connect';
@@ -16,7 +17,13 @@ function Stat({ value, label }: { value: number; label: string }) {
 
 export default async function PanelHome() {
   const { tenant } = await requireTenant();
-  const tg = await telegramStatus(tenant.id);
+  const db = getDb();
+  const [tg, pending, leads, todayChats] = await Promise.all([
+    telegramStatus(tenant.id),
+    countPendingDrafts(db, tenant.id),
+    countLeads(db, tenant.id),
+    countTodayConversations(db, tenant.id),
+  ]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -38,9 +45,9 @@ export default async function PanelHome() {
       {!tg.connected && <TelegramConnect />}
 
       <div className="grid grid-cols-3 gap-3">
-        <Stat value={0} label={fa.panel.home.todayChats} />
-        <Stat value={0} label={fa.panel.home.newLeads} />
-        <Stat value={0} label={fa.panel.home.pendingApproval} />
+        <Stat value={todayChats} label={fa.panel.home.todayChats} />
+        <Stat value={leads} label={fa.panel.home.newLeads} />
+        <Stat value={pending} label={fa.panel.home.pendingApproval} />
       </div>
 
       <button className="w-full rounded-2xl bg-accent px-4 py-4 text-lg font-semibold text-white transition hover:bg-accent-ink">

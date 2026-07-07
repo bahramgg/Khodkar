@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeIranMobile, isValidIranMobile, toEnglishDigits } from './phone.js';
+import { normalizeIranMobile, isValidIranMobile, toEnglishDigits, findIranMobile } from './phone.js';
 
 describe('toEnglishDigits', () => {
   it('converts Persian and Arabic digits', () => {
@@ -39,5 +39,16 @@ describe('normalizeIranMobile', () => {
   it('isValidIranMobile mirrors normalize', () => {
     expect(isValidIranMobile('09121234567')).toBe(true);
     expect(isValidIranMobile('nope')).toBe(false);
+  });
+});
+
+describe('findIranMobile', () => {
+  it('extracts a number embedded in a sentence', () => {
+    expect(findIranMobile('شماره‌ام ۰۹۱۲۱۲۳۴۵۶۷ هست، لطفاً تماس بگیرید')).toBe('+989121234567');
+    expect(findIranMobile('call me on 0912 123 4567 please')).toBe('+989121234567');
+  });
+  it('returns null when there is no mobile number', () => {
+    expect(findIranMobile('سلام خوبی؟')).toBeNull();
+    expect(findIranMobile('کد محصول ۱۲۳۴ است')).toBeNull();
   });
 });

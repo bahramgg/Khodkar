@@ -345,6 +345,24 @@ export const qualityReports = pgTable(
   (t) => [uniqueIndex('quality_tenant_week_uq').on(t.tenantId, t.week)],
 );
 
+// ─── unanswered_questions ─────────────────────────────────────────────────────
+// Fed by the `log_unanswered` path (zero-hit / low-confidence). One-click
+// convert to a FAQ (§11). status: open | converted | dismissed.
+export const unansweredQuestions = pgTable(
+  'unanswered_questions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'cascade' }),
+    convId: uuid('conv_id').references(() => conversations.id, { onDelete: 'set null' }),
+    question: text('question').notNull(),
+    status: text('status').notNull().default('open'),
+    createdAt: now(),
+  },
+  (t) => [index('unanswered_tenant_status_idx').on(t.tenantId, t.status)],
+);
+
 export const schema = {
   tenants,
   users,
@@ -362,4 +380,5 @@ export const schema = {
   usageEvents,
   subscriptions,
   qualityReports,
+  unansweredQuestions,
 };
