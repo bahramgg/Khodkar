@@ -80,3 +80,23 @@ export async function setFactEmbedding(
     sql`update facts set embedding = ${vec}::vector, updated_at = now() where id = ${factId}`,
   );
 }
+
+/** Products (id + title) to embed for a tenant. */
+export async function getIndexableProducts(
+  db: Database,
+  tenantId: string,
+): Promise<{ id: string; title: string }[]> {
+  return (await db.execute(
+    sql`select id, title from products where tenant_id = ${tenantId}`,
+  )) as unknown as { id: string; title: string }[];
+}
+
+/** Facts (id + q + a) to embed for a tenant. */
+export async function getIndexableFacts(
+  db: Database,
+  tenantId: string,
+): Promise<{ id: string; q: string; a: string }[]> {
+  return (await db.execute(
+    sql`select id, q, a from facts where tenant_id = ${tenantId}`,
+  )) as unknown as { id: string; q: string; a: string }[];
+}

@@ -1,4 +1,7 @@
 import { fa, toPersianDigits } from '@khodkar/shared';
+import { requireTenant } from '@/lib/tenant';
+import { telegramStatus } from '@/lib/telegram';
+import { TelegramConnect } from './telegram-connect';
 
 export const runtime = 'nodejs';
 
@@ -11,15 +14,28 @@ function Stat({ value, label }: { value: number; label: string }) {
   );
 }
 
-export default function PanelHome() {
-  // Access is enforced by the panel layout (requireTenant). Week 2: static zeros;
-  // real metrics land with conversations/leads (week 6+).
+export default async function PanelHome() {
+  const { tenant } = await requireTenant();
+  const tg = await telegramStatus(tenant.id);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-2 rounded-2xl border border-surface-border bg-surface-card px-4 py-3">
-        <span className="h-3 w-3 rounded-full bg-red-400" aria-hidden />
-        <span className="text-sm">{fa.panel.home.botOff}</span>
+        <span
+          className={`h-3 w-3 rounded-full ${tg.connected ? 'bg-green-500' : 'bg-red-400'}`}
+          aria-hidden
+        />
+        <span className="text-sm">
+          {tg.connected ? fa.panel.home.botOn : fa.panel.home.botOff}
+        </span>
+        {tg.connected && tg.username && (
+          <span className="ms-auto text-xs text-ink-muted" dir="ltr">
+            @{tg.username}
+          </span>
+        )}
       </div>
+
+      {!tg.connected && <TelegramConnect />}
 
       <div className="grid grid-cols-3 gap-3">
         <Stat value={0} label={fa.panel.home.todayChats} />

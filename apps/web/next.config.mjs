@@ -7,7 +7,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   // Workspace packages are shipped as TS source; let Next transpile them.
-  transpilePackages: ['@khodkar/shared', '@khodkar/db', '@khodkar/channels'],
+  transpilePackages: [
+    '@khodkar/shared',
+    '@khodkar/db',
+    '@khodkar/channels',
+    '@khodkar/agent',
+    '@khodkar/presets',
+  ],
   output: 'standalone',
   experimental: {
     // Trace files from the monorepo root so standalone bundles workspace deps.

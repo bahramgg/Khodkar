@@ -20,4 +20,7 @@ export const env = {
   smsProvider: process.env.SMS_PROVIDER ?? 'mock',
   otpTtlSeconds: Number(process.env.OTP_TTL_SECONDS ?? 300),
   otpLength: Number(process.env.OTP_LENGTH ?? 5),
+  // Public https base used to register Telegram webhooks. Empty in local dev
+  // (webhook registration is skipped; the bot logic is still testable).
+  telegramWebhookBase: process.env.TELEGRAM_WEBHOOK_BASE ?? '',
 };

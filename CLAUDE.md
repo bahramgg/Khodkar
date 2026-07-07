@@ -56,7 +56,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
   - DoD: سایت تستی ⇐ ۱۰۰+ محصول با قیمت درست (E2E: crawl زنده ⇐ import ⇐ ۱۲۰ محصول).
 - [x] **هفته ۴** — RAG (pgvector) + agent core + policy layer.
   - DoD: تست‌های policy سبز (قیمت آزاد بلاک می‌شود)؛ RAG روی pgvector زنده تأیید شد.
-- [ ] هفته ۵ — کانال تلگرام (grammY multi-bot) + ویزارد BotFather.
+- [x] **هفته ۵** — کانال تلگرام (grammY multi-bot) + ویزارد BotFather.
+  - DoD: پیام واقعی ⇐ پاسخ درست از کاتالوگ (E2E: update تلگرام ⇐ پاسخ گراندد + ذخیره).
+- [ ] هفته ۶ — draft-approval مالک + leads + سؤال‌های بی‌جواب.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.

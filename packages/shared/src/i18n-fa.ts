@@ -104,6 +104,25 @@ export const fa = {
     salon: 'آرایشگاه / سالن زیبایی',
     restaurant: 'رستوران / کافه',
   },
+  agent: {
+    holding: 'ممنون از پیامت 🙏 همکارانم به‌زودی برایت پاسخ می‌فرستند.',
+    fallback: 'اجازه بده این را از همکارم بپرسم و بهت خبر بدهم.',
+  },
+  connect: {
+    telegramTitle: 'اتصال ربات تلگرام',
+    botOffAction: 'اتصال تلگرام',
+    connectedAs: (username: string) => `متصل به @${username}`,
+    steps: [
+      'در تلگرام به @BotFather پیام بده و دستور /newbot را بزن.',
+      'یک نام و یک آیدی برای ربات انتخاب کن.',
+      'توکنی که BotFather می‌دهد را کپی کن و این‌جا بچسبان.',
+    ],
+    tokenLabel: 'توکن ربات',
+    tokenPlaceholder: '123456:ABC-DEF…',
+    connect: 'فعال‌سازی ربات',
+    connecting: 'در حال اتصال…',
+    invalidToken: 'توکن معتبر نیست. دوباره از BotFather بگیر.',
+  },
   errors: {
     generic: 'مشکلی پیش آمد. دوباره تلاش کن.',
     unauthorized: 'لطفاً وارد شو.',
