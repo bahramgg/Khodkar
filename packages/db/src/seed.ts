@@ -7,7 +7,7 @@
  */
 import { eq } from 'drizzle-orm';
 import { createDb } from './client.js';
-import { tenants, users, facts, products } from './schema.js';
+import { tenants, users, memberships, facts, products } from './schema.js';
 
 const DEMO_TENANT = 'مزون آرزو (نمونه)';
 const OWNER_PHONE = '+989120000000';
@@ -97,10 +97,18 @@ async function main() {
 
   if (!tenant) throw new Error('failed to insert demo tenant');
 
-  await db
+  const [owner] = await db
     .insert(users)
     .values({ tenantId: tenant.id, phone: OWNER_PHONE, role: 'owner' })
-    .onConflictDoNothing({ target: users.phone });
+    .onConflictDoUpdate({ target: users.phone, set: { tenantId: tenant.id } })
+    .returning();
+
+  if (owner) {
+    await db
+      .insert(memberships)
+      .values({ tenantId: tenant.id, userId: owner.id, role: 'owner' })
+      .onConflictDoNothing({ target: [memberships.tenantId, memberships.userId] });
+  }
 
   await db.insert(facts).values(DEMO_FACTS.map((f) => ({ ...f, tenantId: tenant.id })));
   await db.insert(products).values(buildProducts(tenant.id));

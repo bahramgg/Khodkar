@@ -69,13 +69,15 @@ export const tenants = pgTable('tenants', {
 });
 
 // ─── users ────────────────────────────────────────────────────────────────────
-// `tenantId` is nullable: a user logs in by phone (OTP) before their tenant
-// exists during onboarding, then gets linked.
+// `tenantId` here is the user's **active** tenant (the one their session is
+// currently scoped to). It is nullable — a user logs in by phone (OTP) before
+// any tenant exists — and `set null` on delete so removing a tenant never
+// deletes its owner (they may own others). Access rights live in `memberships`.
 export const users = pgTable(
   'users',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    tenantId: uuid('tenant_id').references(() => tenants.id, { onDelete: 'cascade' }),
+    tenantId: uuid('tenant_id').references(() => tenants.id, { onDelete: 'set null' }),
     phone: text('phone').notNull(),
     role: userRoleEnum('role').notNull().default('owner'),
     tgChatId: bigint('tg_chat_id', { mode: 'number' }),
@@ -83,6 +85,29 @@ export const users = pgTable(
     updatedAt: updated(),
   },
   (t) => [uniqueIndex('users_phone_uq').on(t.phone)],
+);
+
+// ─── memberships ──────────────────────────────────────────────────────────────
+// Source of truth for which tenants a user may access, and with what role.
+// A "secure tenant switch" checks a membership exists before changing the
+// active tenant. One row per (tenant, user).
+export const memberships = pgTable(
+  'memberships',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    role: userRoleEnum('role').notNull().default('owner'),
+    createdAt: now(),
+  },
+  (t) => [
+    uniqueIndex('memberships_tenant_user_uq').on(t.tenantId, t.userId),
+    index('memberships_user_idx').on(t.userId),
+  ],
 );
 
 // ─── otp_codes (auth) ─────────────────────────────────────────────────────────
@@ -323,6 +348,7 @@ export const qualityReports = pgTable(
 export const schema = {
   tenants,
   users,
+  memberships,
   otpCodes,
   channels,
   products,

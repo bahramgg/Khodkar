@@ -5,10 +5,16 @@ import { redirect } from 'next/navigation';
 import {
   SESSION_COOKIE,
   DEFAULT_SESSION_TTL_SECONDS,
+  signSession,
   verifySession,
   type SessionPayload,
 } from '@khodkar/shared';
 import { env } from './env.js';
+
+/** Sign a session payload and write it to the cookie (create/switch tenant). */
+export async function issueSession(payload: SessionPayload): Promise<void> {
+  setSessionCookie(await signSession(payload, env.sessionSecret));
+}
 
 export function setSessionCookie(token: string): void {
   cookies().set(SESSION_COOKIE, token, {

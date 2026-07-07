@@ -1,18 +1,21 @@
-import { fa } from '@khodkar/shared';
+import { redirect } from 'next/navigation';
+import { VERTICALS, fa } from '@khodkar/shared';
 import { requireSession } from '@/lib/session';
+import { CreateTenantForm } from './create-tenant-form';
 
 export const runtime = 'nodejs';
 
 export default async function OnboardingPage() {
-  await requireSession();
-  // Placeholder — the agentic onboarding (crawl → interview → sandbox) is built
-  // in week 7 (docs/master-plan-fa.md §7). Week 1 just proves auth + routing.
+  const session = await requireSession();
+  // Already has an active tenant → straight to the panel.
+  if (session.tenantId) redirect('/panel');
+
+  const verticals = VERTICALS.map((id) => ({ id, label: fa.verticals[id] }));
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col items-center justify-center gap-4 px-6 text-center">
-      <h1 className="text-2xl font-bold">{fa.auth.welcome}</h1>
-      <p className="text-ink-muted">
-        به {fa.brand} خوش آمدی. آنبوردینگ به‌زودی این‌جا فعال می‌شود.
-      </p>
+    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-10">
+      <h1 className="mb-1 text-2xl font-bold">{fa.onboarding.title}</h1>
+      <p className="mb-6 text-sm text-ink-muted">{fa.onboarding.subtitle}</p>
+      <CreateTenantForm verticals={verticals} />
     </main>
   );
 }

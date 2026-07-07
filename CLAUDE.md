@@ -50,7 +50,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
 
 - [x] **هفته ۱** — اسکلت monorepo، docker، DB schema (بخش ۵)، auth OTP (mock در dev).
   - DoD: `docker compose up` ⇐ لاگین موبایلی کار می‌کند.
-- [ ] هفته ۲ — tenants + پنل خالی ۴صفحه‌ای RTL.
+- [x] **هفته ۲** — tenants + پنل خالی ۴صفحه‌ای RTL.
+  - DoD: ساخت tenant و سوئیچ امن (membership-based؛ سوئیچ به tenantِ غیرعضو ⇐ ۴۰۳).
+- [ ] هفته ۳ — crawler (Woo + generic) + ایمپورت کاتالوگ.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.
