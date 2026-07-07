@@ -9,3 +9,4 @@ export * from './tenant.js';
 export * from './billing.js';
 export * from './audit.js';
 export * from './quality.js';
+export * from './analytics.js';

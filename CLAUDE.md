@@ -68,7 +68,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
   - DoD: پرداخت تست ⇐ فعال‌سازی پلن (E2E: checkout→callback→plan=basic + subscription).
 - [x] **هفته ۱۰** — گزارش هفتگی کیفیت + audit + kill-switch + تست injection.
   - DoD: گزارش نمونه به تلگرام مالک (E2E: report → owner chat + quality_reports + kill-switch + audit).
-- [ ] هفته ۱۱ — لندینگ + دموی زنده + آنالیتیکس اکتیویشن.
+- [x] **هفته ۱۱** — لندینگ + دموی زنده + آنالیتیکس اکتیویشن.
+  - DoD: صفحه لایو، فرم دمو کار می‌کند (E2E: crawl سایت خارجی → پاسخ گراندد + analytics_events).
+- [ ] هفته ۱۲ — پایلوت: مظهری tenant#1 + دو کسب‌وکار دیگر.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.

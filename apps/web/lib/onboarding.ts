@@ -8,6 +8,7 @@ import {
   setTenantToneProfile,
   setTenantStatus,
   getTenantMeta,
+  recordEvent,
 } from '@khodkar/db';
 import {
   DbRetriever,
@@ -112,4 +113,5 @@ export async function sandboxReply(tenantId: string, text: string): Promise<Sand
 export async function activateTenant(tenantId: string): Promise<void> {
   await setTenantStatus(getDb(), tenantId, 'active');
   await ensureWebChannel(tenantId);
+  await recordEvent(getDb(), { event: 'onboard_complete', tenantId });
 }

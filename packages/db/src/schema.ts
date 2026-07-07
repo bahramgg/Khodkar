@@ -363,6 +363,20 @@ export const qualityReports = pgTable(
   (t) => [uniqueIndex('quality_tenant_week_uq').on(t.tenantId, t.week)],
 );
 
+// ─── analytics_events ─────────────────────────────────────────────────────────
+// Activation funnel analytics (§16). tenant_id is nullable (anonymous landing).
+export const analyticsEvents = pgTable(
+  'analytics_events',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    event: text('event').notNull(),
+    tenantId: uuid('tenant_id').references(() => tenants.id, { onDelete: 'set null' }),
+    meta: jsonb('meta').notNull().default({}),
+    createdAt: now(),
+  },
+  (t) => [index('analytics_event_idx').on(t.event, t.createdAt)],
+);
+
 // ─── audit_log ────────────────────────────────────────────────────────────────
 // Full audit trail of agent decisions + owner/system actions (§11).
 export const auditLog = pgTable(
@@ -418,5 +432,6 @@ export const schema = {
   payments,
   qualityReports,
   auditLog,
+  analyticsEvents,
   unansweredQuestions,
 };
