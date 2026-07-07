@@ -54,7 +54,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
   - DoD: ساخت tenant و سوئیچ امن (membership-based؛ سوئیچ به tenantِ غیرعضو ⇐ ۴۰۳).
 - [x] **هفته ۳** — crawler (Woo + generic) + ایمپورت کاتالوگ.
   - DoD: سایت تستی ⇐ ۱۰۰+ محصول با قیمت درست (E2E: crawl زنده ⇐ import ⇐ ۱۲۰ محصول).
-- [ ] هفته ۴ — RAG (pgvector) + agent core + policy layer.
+- [x] **هفته ۴** — RAG (pgvector) + agent core + policy layer.
+  - DoD: تست‌های policy سبز (قیمت آزاد بلاک می‌شود)؛ RAG روی pgvector زنده تأیید شد.
+- [ ] هفته ۵ — کانال تلگرام (grammY multi-bot) + ویزارد BotFather.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.

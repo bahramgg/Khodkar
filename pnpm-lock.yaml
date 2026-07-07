@@ -97,6 +97,9 @@ importers:
       '@khodkar/db':
         specifier: workspace:*
         version: link:../db
+      '@khodkar/presets':
+        specifier: workspace:*
+        version: link:../../presets
       '@khodkar/shared':
         specifier: workspace:*
         version: link:../shared
