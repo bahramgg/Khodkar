@@ -27,6 +27,7 @@ import { env } from './env.js';
 import { embedder } from './embeddings.js';
 import { encryptTelegramCredentials, decryptTelegramCredentials } from './telegram-creds.js';
 import { recordLeadFromText } from './inbox.js';
+import { recordMessageUsage } from './billing.js';
 import { makeConversationSink } from './conversation-sink.js';
 
 const encryptCreds = encryptTelegramCredentials;
@@ -105,6 +106,7 @@ export async function processTelegramUpdate(
     botInfo: creds.botInfo,
     onText: async ({ chatId, text }) => {
       await recordLeadFromText(channel.tenantId, text);
+      await recordMessageUsage(channel.tenantId);
       const r = await handleCustomerText({ sink, agent }, { customerRef: String(chatId), text });
       return r.reply;
     },

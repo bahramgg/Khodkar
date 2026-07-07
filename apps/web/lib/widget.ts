@@ -5,6 +5,7 @@ import { handleCustomerText } from '@khodkar/channels';
 import { agentForTenant } from './telegram.js';
 import { makeConversationSink } from './conversation-sink.js';
 import { recordLeadFromText } from './inbox.js';
+import { recordMessageUsage } from './billing.js';
 
 /** The widget key is the web channel's id (a public, unguessable uuid). */
 export async function ensureWebChannel(tenantId: string): Promise<string> {
@@ -48,6 +49,7 @@ export async function handleWidgetMessage(
   if (rateLimited(`${key}:${sessionId}`)) return { ok: false, error: 'rate_limited' };
 
   await recordLeadFromText(channel.tenantId, text, 'web');
+  await recordMessageUsage(channel.tenantId);
   const sink = makeConversationSink(channel.tenantId, key);
   const agent = agentForTenant(channel.tenantId);
   const r = await handleCustomerText(

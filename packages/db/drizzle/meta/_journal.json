@@ -22,6 +22,13 @@
       "when": 1783433418211,
       "tag": "0002_bouncy_arachne",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783435285249,
+      "tag": "0003_flimsy_meltdown",
+      "breakpoints": true
     }
   ]
 }

@@ -25,4 +25,8 @@ export const env = {
   telegramWebhookBase: process.env.TELEGRAM_WEBHOOK_BASE ?? '',
   // Public base URL of this panel (used in the widget embed snippet).
   appUrl: process.env.APP_URL ?? process.env.TELEGRAM_WEBHOOK_BASE ?? '',
+  // Payments: `mock` (dev) approves instantly; `zarinpal` is the real gateway.
+  paymentProvider: process.env.PAYMENT_PROVIDER ?? 'mock',
+  zarinpalMerchantId: process.env.ZARINPAL_MERCHANT_ID ?? '',
+  zarinpalSandbox: (process.env.ZARINPAL_SANDBOX ?? 'true') === 'true',
 };

@@ -64,7 +64,9 @@ pnpm test                       # vitest کل ورک‌اسپیس
   - DoD طلایی: لینک ⇐ ربات < ۱۰ دقیقه (E2E: crawl→interview→sandbox→live در < ۱ ثانیه).
 - [x] **هفته ۸** — ویجت وب + پنل گفتگوها/کاتالوگ کامل.
   - DoD: ویجت روی یک سایت خارجی کار می‌کند (تأیید با مرورگر واقعی روی origin جدا).
-- [ ] هفته ۹ — billing زرین‌پال + usage metering + پلن‌ها.
+- [x] **هفته ۹** — billing زرین‌پال + usage metering + پلن‌ها.
+  - DoD: پرداخت تست ⇐ فعال‌سازی پلن (E2E: checkout→callback→plan=basic + subscription).
+- [ ] هفته ۱۰ — گزارش هفتگی کیفیت + audit + kill-switch + تست injection.
 - [ ] ... (بخش ۱۵)
 
 بعد از هر فاز: چک DoD ⇐ کامیت ⇐ فاز بعد.

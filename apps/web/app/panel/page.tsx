@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { fa, toPersianDigits } from '@khodkar/shared';
 import { getDb, countPendingDrafts, countLeads, countTodayConversations } from '@khodkar/db';
 import { requireTenant } from '@/lib/tenant';
@@ -61,6 +62,13 @@ export default async function PanelHome() {
       >
         {fa.panel.settingsAssistant} · {fa.common.soon}
       </button>
+
+      <Link
+        href="/panel/billing"
+        className="text-center text-sm text-accent-ink underline"
+      >
+        {fa.plans.manage}
+      </Link>
     </div>
   );
 }

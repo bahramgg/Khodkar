@@ -328,6 +328,24 @@ export const subscriptions = pgTable(
   (t) => [index('subscriptions_tenant_idx').on(t.tenantId)],
 );
 
+// ─── payments (zarinpal) ──────────────────────────────────────────────────────
+export const payments = pgTable(
+  'payments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'cascade' }),
+    authority: text('authority').notNull(),
+    amount: bigint('amount', { mode: 'number' }).notNull(),
+    plan: planEnum('plan').notNull(),
+    status: text('status').notNull().default('pending'),
+    refId: text('ref_id'),
+    createdAt: now(),
+  },
+  (t) => [uniqueIndex('payments_authority_uq').on(t.authority)],
+);
+
 // ─── quality_reports ──────────────────────────────────────────────────────────
 export const qualityReports = pgTable(
   'quality_reports',
@@ -379,6 +397,7 @@ export const schema = {
   ordersOrBookings,
   usageEvents,
   subscriptions,
+  payments,
   qualityReports,
   unansweredQuestions,
 };
