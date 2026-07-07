@@ -11,6 +11,7 @@ import { requireTenant } from '@/lib/tenant';
 import { telegramStatus } from '@/lib/telegram';
 import { TelegramConnect } from './telegram-connect';
 import { BotControls } from './bot-controls';
+import { PilotFeedback } from './pilot-feedback';
 
 export const runtime = 'nodejs';
 
@@ -79,6 +80,8 @@ export default async function PanelHome() {
       >
         {fa.plans.manage}
       </Link>
+
+      <PilotFeedback />
     </div>
   );
 }

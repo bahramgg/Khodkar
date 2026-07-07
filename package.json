@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "db:generate": "pnpm --filter @khodkar/db generate",
     "db:migrate": "pnpm --filter @khodkar/db migrate",
-    "db:seed": "pnpm --filter @khodkar/db seed"
+    "db:seed": "pnpm --filter @khodkar/db seed",
+    "db:seed:pilot": "pnpm --filter @khodkar/worker seed:pilot"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

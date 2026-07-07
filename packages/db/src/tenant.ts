@@ -33,6 +33,11 @@ export async function getTenantMeta(
   return rows[0] ?? null;
 }
 
+/** Delete a tenant by name (idempotent seeding). Cascades to its rows. */
+export async function deleteTenantByName(db: Database, name: string): Promise<void> {
+  await db.execute(sql`delete from tenants where name = ${name}`);
+}
+
 /** Ids of all active tenants (used by scheduled jobs). */
 export async function listActiveTenantIds(db: Database): Promise<string[]> {
   const rows = (await db.execute(

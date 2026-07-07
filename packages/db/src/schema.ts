@@ -363,6 +363,36 @@ export const qualityReports = pgTable(
   (t) => [uniqueIndex('quality_tenant_week_uq').on(t.tenantId, t.week)],
 );
 
+// ─── nps_responses (pilot) ────────────────────────────────────────────────────
+export const npsResponses = pgTable(
+  'nps_responses',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id')
+      .notNull()
+      .references(() => tenants.id, { onDelete: 'cascade' }),
+    source: text('source').notNull().default('owner'), // owner | customer
+    score: integer('score').notNull(),
+    comment: text('comment'),
+    createdAt: now(),
+  },
+  (t) => [index('nps_tenant_idx').on(t.tenantId)],
+);
+
+// ─── feedback / bug list (pilot) ──────────────────────────────────────────────
+export const feedback = pgTable(
+  'feedback',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id').references(() => tenants.id, { onDelete: 'set null' }),
+    kind: text('kind').notNull().default('bug'), // bug | idea
+    text: text('text').notNull(),
+    status: text('status').notNull().default('open'), // open | closed
+    createdAt: now(),
+  },
+  (t) => [index('feedback_status_idx').on(t.status, t.createdAt)],
+);
+
 // ─── analytics_events ─────────────────────────────────────────────────────────
 // Activation funnel analytics (§16). tenant_id is nullable (anonymous landing).
 export const analyticsEvents = pgTable(
@@ -433,5 +463,7 @@ export const schema = {
   qualityReports,
   auditLog,
   analyticsEvents,
+  npsResponses,
+  feedback,
   unansweredQuestions,
 };

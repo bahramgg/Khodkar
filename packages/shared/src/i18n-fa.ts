@@ -209,6 +209,17 @@ export const fa = {
     connecting: 'در حال اتصال…',
     invalidToken: 'توکن معتبر نیست. دوباره از BotFather بگیر.',
   },
+  pilot: {
+    npsTitle: 'چقدر «خودکار» را به دیگران پیشنهاد می‌کنی؟',
+    npsHint: '۰ (اصلاً) تا ۱۰ (حتماً)',
+    npsThanks: 'ممنون از نظرت 🙏',
+    feedbackTitle: 'گزارش باگ یا پیشنهاد',
+    bug: 'باگ',
+    idea: 'پیشنهاد',
+    feedbackPlaceholder: 'چی دیدی یا دوست داری چی اضافه بشه؟',
+    send: 'ارسال',
+    sent: 'ثبت شد ✅',
+  },
   landing: {
     h1a: 'لینک سایتت را بده؛',
     h1b: '۱۰ دقیقه بعد دستیار فروش داری.',
