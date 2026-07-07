@@ -6,13 +6,9 @@ import {
   upsertChannel,
   getChannelById,
   getActiveChannel,
-  ensureConversation,
-  addMessage,
-  createDraft,
   insertUnanswered,
   type ChannelRow,
 } from '@khodkar/db';
-import type { MessageRole } from '@khodkar/shared';
 import {
   DbRetriever,
   CatalogResponder,
@@ -24,7 +20,6 @@ import {
   setWebhook,
   buildTelegramBot,
   handleCustomerText,
-  type ConversationSink,
   type TelegramCredentials,
 } from '@khodkar/channels';
 import type { Update } from 'grammy/types';
@@ -32,27 +27,10 @@ import { env } from './env.js';
 import { embedder } from './embeddings.js';
 import { encryptTelegramCredentials, decryptTelegramCredentials } from './telegram-creds.js';
 import { recordLeadFromText } from './inbox.js';
+import { makeConversationSink } from './conversation-sink.js';
 
 const encryptCreds = encryptTelegramCredentials;
 const decryptCreds = decryptTelegramCredentials;
-
-/** Conversation sink bound to one tenant + channel. */
-class DrizzleConversationSink implements ConversationSink {
-  constructor(private readonly tenantId: string, private readonly channelId: string) {}
-  ensureConversation(customerRef: string): Promise<string> {
-    return ensureConversation(getDb(), {
-      tenantId: this.tenantId,
-      channelId: this.channelId,
-      customerRef,
-    });
-  }
-  addMessage(convId: string, role: MessageRole, text: string, meta?: Record<string, unknown>) {
-    return addMessage(getDb(), { convId, role, text, meta });
-  }
-  createDraft(convId: string, proposedText: string, reason?: string) {
-    return createDraft(getDb(), { convId, proposedText, reason });
-  }
-}
 
 /** Build the customer agent for a tenant (RAG over its catalog + facts). */
 export function agentForTenant(tenantId: string) {
@@ -121,7 +99,7 @@ export async function processTelegramUpdate(
   const creds = decryptCreds(channel.credentials);
   if (creds.webhookSecret !== secret) return { ok: false };
 
-  const sink = new DrizzleConversationSink(channel.tenantId, channelId);
+  const sink = makeConversationSink(channel.tenantId, channelId);
   const agent = agentForTenant(channel.tenantId);
   const bot = buildTelegramBot(creds.token, {
     botInfo: creds.botInfo,

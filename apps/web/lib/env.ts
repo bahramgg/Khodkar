@@ -23,4 +23,6 @@ export const env = {
   // Public https base used to register Telegram webhooks. Empty in local dev
   // (webhook registration is skipped; the bot logic is still testable).
   telegramWebhookBase: process.env.TELEGRAM_WEBHOOK_BASE ?? '',
+  // Public base URL of this panel (used in the widget embed snippet).
+  appUrl: process.env.APP_URL ?? process.env.TELEGRAM_WEBHOOK_BASE ?? '',
 };

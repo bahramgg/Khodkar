@@ -24,6 +24,31 @@ function synthSku(title: string): string {
   return `auto:${createHash('sha1').update(title).digest('hex').slice(0, 16)}`;
 }
 
+/** Insert a single product (manual add from the panel); returns its id. */
+export async function insertProduct(
+  db: Database,
+  params: {
+    tenantId: string;
+    title: string;
+    price: number | null;
+    images?: string[];
+    sku?: string | null;
+  },
+): Promise<string> {
+  const [row] = await db
+    .insert(products)
+    .values({
+      tenantId: params.tenantId,
+      title: params.title,
+      price: params.price,
+      images: params.images ?? [],
+      sku: params.sku && params.sku.length > 0 ? params.sku : synthSku(params.title),
+    })
+    .returning({ id: products.id });
+  if (!row) throw new Error('failed to insert product');
+  return row.id;
+}
+
 const CHUNK = 500;
 
 /**

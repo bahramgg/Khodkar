@@ -19,6 +19,7 @@ import { crawlSite, type Fetcher } from '@khodkar/crawler';
 import { getPreset, type VerticalPreset } from '@khodkar/presets';
 import type { Vertical, ToneProfile } from '@khodkar/shared';
 import { embedder } from './embeddings.js';
+import { ensureWebChannel } from './widget.js';
 
 export interface CrawlSummary {
   source: string;
@@ -107,7 +108,8 @@ export async function sandboxReply(tenantId: string, text: string): Promise<Sand
   return { action: r.action, reply: r.toCustomer, proposedText: r.ownerDraft ?? r.toCustomer };
 }
 
-/** Step 4 — go live. */
+/** Step 4 — go live: activate and provision the web-widget channel. */
 export async function activateTenant(tenantId: string): Promise<void> {
   await setTenantStatus(getDb(), tenantId, 'active');
+  await ensureWebChannel(tenantId);
 }
