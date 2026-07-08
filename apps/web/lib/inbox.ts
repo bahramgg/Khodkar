@@ -86,7 +86,7 @@ export async function resolveDraft(
   return { ok: true, sent };
 }
 
-/** Capture a lead when a customer shares an Iranian mobile number. */
+/** Capture a lead when a customer shares a mobile number. */
 export async function recordLeadFromText(
   tenantId: string,
   text: string,

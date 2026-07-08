@@ -44,7 +44,7 @@ export function createSmsProvider(
   }
 }
 
-/** Build the Persian OTP SMS text. */
+/** Build the localized OTP SMS text. */
 export function otpSmsText(code: string): string {
   return `کد ورود شما به «خودکار»: ${code}\nاین کد تا ۵ دقیقه معتبر است.`;
 }

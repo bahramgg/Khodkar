@@ -1,7 +1,7 @@
 /**
  * Price parsing & normalization — the crux of "correct prices" in the DoD.
- * Handles Persian/Arabic digits, thousands separators (`,` `٬` `،`), currency
- * words, WooCommerce minor-units, and IRR→Toman conversion.
+ * Handles localized (non-Latin) digits, thousands separators (`,` `٬` `،`),
+ * currency words, WooCommerce minor-units, and IRR→Toman conversion.
  */
 import { toEnglishDigits } from '@khodkar/shared';
 
@@ -35,7 +35,7 @@ export function fromMinorUnits(
 }
 
 /**
- * Normalize an amount to Toman given its currency. Iranian sites quote either
+ * Normalize an amount to Toman given its currency. Regional sites quote either
  * Rial (IRR) or Toman (IRT/TOMAN); 1 Toman = 10 Rial.
  */
 export function toToman(amount: number, currencyCode?: string | null): number {

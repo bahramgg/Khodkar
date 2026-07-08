@@ -1,6 +1,6 @@
 /**
- * Persian (fa-IR) UI strings + number helpers. Per CLAUDE.md: **no hardcoded
- * strings in UI** — everything user-facing comes from `fa` here.
+ * Localized (fa-IR, RTL) UI strings + number helpers. Per CLAUDE.md: **no
+ * hardcoded strings in UI** — everything user-facing comes from `fa` here.
  */
 
 const EN_TO_FA_DIGITS: Record<string, string> = {
@@ -8,12 +8,12 @@ const EN_TO_FA_DIGITS: Record<string, string> = {
   '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹',
 };
 
-/** Convert ASCII digits in a string/number to Persian digits. */
+/** Convert ASCII digits in a string/number to localized digits. */
 export function toPersianDigits(input: string | number): string {
   return String(input).replace(/[0-9]/g, (d) => EN_TO_FA_DIGITS[d] ?? d);
 }
 
-/** Format a Toman/Rial amount with thousands separators and Persian digits. */
+/** Format a Toman/Rial amount with thousands separators and localized digits. */
 export function formatToman(amount: number): string {
   const grouped = Math.round(amount).toLocaleString('en-US');
   return `${toPersianDigits(grouped)} تومان`;

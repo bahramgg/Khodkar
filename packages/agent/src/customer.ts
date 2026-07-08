@@ -2,7 +2,7 @@
  * Customer-facing agent: turns a message into either an auto-reply or an
  * owner-draft, mapping the policy decision to what the customer actually sees.
  *
- * The default {@link CatalogResponder} composes a grounded Persian reply from
+ * The default {@link CatalogResponder} composes a grounded localized reply from
  * the top RAG hit (no LLM needed) — a safe v1 baseline. A real LLM responder
  * implements the same {@link Responder} interface and drops in unchanged.
  */

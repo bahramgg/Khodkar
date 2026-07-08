@@ -1,20 +1,20 @@
 /**
- * Iranian mobile-number normalization.
+ * Mobile-number normalization for the target market.
  *
- * Accepts the many shapes users actually type — Persian/Arabic digits,
+ * Accepts the many shapes users actually type — localized (non-Latin) digits,
  * spaces/dashes, `0912…`, `+98912…`, `0098912…`, `912…` — and canonicalizes
  * to E.164 `+989XXXXXXXXX`. Returns `null` when the input is not a valid
- * Iranian mobile number, so callers can treat "invalid phone" explicitly.
+ * mobile number, so callers can treat "invalid phone" explicitly.
  */
 
-const PERSIAN_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+const LOCAL_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
 const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 
-/** Convert Persian/Arabic digit characters in a string to ASCII `0-9`. */
+/** Convert localized (non-Latin) digit characters in a string to ASCII `0-9`. */
 export function toEnglishDigits(input: string): string {
   let out = '';
   for (const ch of input) {
-    const p = PERSIAN_DIGITS.indexOf(ch);
+    const p = LOCAL_DIGITS.indexOf(ch);
     if (p !== -1) {
       out += String(p);
       continue;
@@ -26,12 +26,12 @@ export function toEnglishDigits(input: string): string {
 }
 
 /**
- * Normalize an Iranian mobile number to `+989XXXXXXXXX`, or `null` if invalid.
- * Iranian mobile subscriber numbers are always `9` followed by 9 digits.
+ * Normalize a mobile number to `+989XXXXXXXXX`, or `null` if invalid.
+ * Mobile subscriber numbers are always `9` followed by 9 digits.
  */
 export function normalizeIranMobile(raw: string): string | null {
   if (!raw) return null;
-  // Persian/Arabic → ASCII, then strip everything but digits.
+  // Localized (non-Latin) → ASCII, then strip everything but digits.
   let digits = toEnglishDigits(raw).replace(/\D/g, '');
 
   // Strip international/trunk prefixes down to the 10-digit subscriber number.
@@ -44,13 +44,13 @@ export function normalizeIranMobile(raw: string): string | null {
   return `+98${digits}`;
 }
 
-/** True when `raw` is a normalizable Iranian mobile number. */
+/** True when `raw` is a normalizable mobile number. */
 export function isValidIranMobile(raw: string): boolean {
   return normalizeIranMobile(raw) !== null;
 }
 
 /**
- * Scan free text for the first Iranian mobile number (e.g. a customer sharing
+ * Scan free text for the first mobile number (e.g. a customer sharing
  * their number in a chat). Returns the canonical form or null.
  */
 export function findIranMobile(text: string): string | null {

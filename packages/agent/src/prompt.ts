@@ -29,7 +29,7 @@ const TONE_LINE: Record<ToneProfile['style'], string> = {
   young: 'لحن: پرانرژی و امروزی.',
 };
 
-/** Build the Persian system prompt with the non-negotiable rules baked in. */
+/** Build the localized system prompt with the non-negotiable rules baked in. */
 export function buildSystemPrompt(params: {
   brand: string;
   tenantName: string;

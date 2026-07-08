@@ -1,7 +1,7 @@
 /**
  * Weekly quality report (§11). A heuristic "judge" over the week's aggregate
  * stats — deflection rate, unanswered questions, missed sales — producing a
- * score, a Persian summary for the owner's Telegram, and structured issues.
+ * score, a localized summary for the owner's Telegram, and structured issues.
  * (A real LLM-as-judge implements the same shape and drops in later.)
  */
 import { toPersianDigits } from '@khodkar/shared';

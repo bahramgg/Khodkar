@@ -104,7 +104,7 @@ function containsAny(haystack: string, needles: string[]): string | null {
   return null;
 }
 
-/** True if the text contains at least one Persian/Arabic letter. */
+/** True if the text contains at least one non-Latin (localized) letter. */
 function hasPersian(text: string): boolean {
   return /[؀-ۿ]/.test(text);
 }
@@ -157,7 +157,7 @@ export function checkAnswer(input: PolicyInput): PolicyDecision {
     escalate('draft');
   }
 
-  // 6) Non-Persian answer → draft (never auto-send a wrong-language reply).
+  // 6) Wrong-language answer → draft (never auto-send a non-localized reply).
   if (input.answer.trim().length > 0 && !hasPersian(input.answer)) {
     reasons.push({ code: 'not_persian' });
     escalate('draft');

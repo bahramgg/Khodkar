@@ -2,7 +2,7 @@
   "name": "khodkar",
   "version": "0.1.0",
   "private": true,
-  "description": "Self-serve automation platform for Iranian small businesses",
+  "description": "Self-serve automation platform for small businesses",
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22"

@@ -27,7 +27,7 @@ const weeklyReportWorker = new Worker(
 );
 
 async function main() {
-  // Schedule the report every Saturday 09:00 (Iran business week start).
+  // Schedule the report every Saturday 09:00 (start of the business week).
   await queues.weeklyReport.add(
     'weekly',
     {},
